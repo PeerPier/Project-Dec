@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL =
+  process.env.REACT_APP_API_ENDPOINT ||
+  "https://kku-blog-server-ak2l.onrender.com";
 
 export const loginUser = async (
   email: string,

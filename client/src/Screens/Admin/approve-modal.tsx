@@ -4,7 +4,52 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { getDay } from "../../common/date";
-import { Report } from "./adminHome";
+
+interface Report {
+  _id: string;
+  reason: string;
+  verified: boolean;
+  status: string;
+  createdAt: string;
+  reportedBy: {
+    _id: string;
+    fullname: string;
+  };
+  post: {
+    _id: string;
+    author: {
+      _id: string;
+      fullname: string;
+      banner: string;
+      profile_picture: string;
+    };
+    content: [
+      {
+        time: number;
+        blocks: [
+          {
+            id: string;
+            type: string;
+            data: {
+              text: string;
+            };
+          }
+        ];
+        version: string;
+      }
+    ];
+    image: string;
+    topic: string;
+    detail: string;
+    tags: string[];
+    banner: string;
+    publishedAt: string;
+    contentWithImages: {
+      content: string;
+      images?: string[];
+    }[];
+  };
+}
 
 interface ReportDetailsModalProps {
   showModal: boolean;
@@ -20,7 +65,9 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
   refreshReports,
 }) => {
   const navigate = useNavigate();
-  const API_BASE_URL = "http://localhost:3001";
+  const API_BASE_URL =
+    process.env.REACT_APP_API_ENDPOINT ||
+    "https://kku-blog-server-ak2l.onrender.com";
 
   const verifyReport = async (
     reportId: string,
@@ -120,29 +167,21 @@ const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({
             <div className="detail-user d-flex  justify-content-between my-4">
               <div className="d-flex gap-2 align-items-start">
                 <img
-                  src={
-                    report?.post.author
-                      ? report?.post.author.profile_picture
-                      : ""
-                  }
+                  src={report?.post.author.profile_picture}
                   alt=""
                   className="rounded-circle"
                   style={{ width: "3rem", height: "3rem" }}
                 />
 
                 <p className="m-0" style={{ textTransform: "capitalize" }}>
-                  {report?.post.author ? report?.post.author.fullname : ""}
+                  {report?.post.author.fullname}
                   <br />@
                   <Link
-                    to={
-                      report?.post.author
-                        ? `/user/${report?.post.author._id}`
-                        : "/404"
-                    }
+                    to={`/user/${report?.post.author.fullname}`}
                     className="underline "
                     style={{ color: "inherit" }}
                   >
-                    {report?.post.author ? report?.post.author.fullname : ""}
+                    {report?.post.author.fullname}
                   </Link>
                 </p>
               </div>

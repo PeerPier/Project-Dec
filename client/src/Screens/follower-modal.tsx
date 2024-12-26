@@ -11,7 +11,7 @@ export function FollowerModal({ userProfile }: any) {
 
   const handleButtonClick = async () => {
     setSmShow(true);
-    const me = sessionStorage.getItem("userId");
+    const me = localStorage.getItem("userId");
     if (me) {
       try {
         const profileData = await fetchProfile(me);
@@ -28,7 +28,7 @@ export function FollowerModal({ userProfile }: any) {
     const newData: string[] = [];
     userProfile?.followers?.forEach((e: any) => {
       const isFollowing = myUser?.following?.some(
-        (follower: any) => follower._id === e
+        (follower: any) => follower === e
       );
       if (isFollowing) {
         newData.push(e);
@@ -38,7 +38,7 @@ export function FollowerModal({ userProfile }: any) {
   }, [userProfile, myUser, isFollowerModal]);
 
   const handleFollow = useCallback(async (you: string) => {
-    const API_BASE_URL = "http://localhost:3001/follow";
+    const API_BASE_URL = "https://kku-blog-server-ak2l.onrender.com/follow";
     try {
       const response = await fetch(API_BASE_URL, {
         method: "POST",
@@ -46,7 +46,7 @@ export function FollowerModal({ userProfile }: any) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          me: sessionStorage.getItem("userId"),
+          me: localStorage.getItem("userId"),
           you: you,
         }),
       });
@@ -58,9 +58,7 @@ export function FollowerModal({ userProfile }: any) {
       }
       const followerData = await response.json();
       setIsFollowerModal(followerData.newFollow.if_followed);
-      const updatedProfile = await fetchProfile(
-        sessionStorage.getItem("userId")
-      );
+      const updatedProfile = await fetchProfile(localStorage.getItem("userId"));
       setMyUser(updatedProfile);
     } catch (error) {
       console.error("Error:", (error as Error).message);
@@ -68,7 +66,7 @@ export function FollowerModal({ userProfile }: any) {
   }, []);
 
   const handleUnfollow = useCallback(async (you: string) => {
-    const API_BASE_URL_DELETE = "http://localhost:3001/follow/delete";
+    const API_BASE_URL_DELETE = "https://kku-blog-server-ak2l.onrender.com/follow/delete";
     try {
       const response = await fetch(API_BASE_URL_DELETE, {
         method: "DELETE",
@@ -76,7 +74,7 @@ export function FollowerModal({ userProfile }: any) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          me: sessionStorage.getItem("userId"),
+          me: localStorage.getItem("userId"),
           you: you,
         }),
       });
@@ -88,14 +86,19 @@ export function FollowerModal({ userProfile }: any) {
       }
       const res = await response.json();
       setIsFollowerModal(false);
-      const updatedProfile = await fetchProfile(
-        sessionStorage.getItem("userId")
-      );
+      const updatedProfile = await fetchProfile(localStorage.getItem("userId"));
       setMyUser(updatedProfile);
     } catch (error) {
       console.error("Error:", (error as Error).message);
     }
   }, []);
+
+  useEffect(() => {
+    console.log("userProfile", userProfile);
+    console.log("currentUser", currentUser);
+    console.log("CheckFollower", CheckFollower);
+    console.log("myUser", myUser);
+  }, [currentUser, userProfile, CheckFollower, myUser]);
 
   return (
     <>
@@ -104,7 +107,7 @@ export function FollowerModal({ userProfile }: any) {
         className="me-2"
         style={{ backgroundColor: "white", color: "black", border: "none" }}
       >
-        <p className="m-0">{`${userProfile?.followers?.length} followers`}</p>
+        <h5 className="m-0">{`${userProfile?.followers?.length} followers`}</h5>
       </Button>
       <Modal
         size="sm"
@@ -114,7 +117,7 @@ export function FollowerModal({ userProfile }: any) {
         aria-labelledby="example-modal-sizes-title-sm"
       >
         <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-sm">กำลังติดตาม</Modal.Title>
+          <Modal.Title id="example-modal-sizes-title-sm">following</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentUser?.followers?.map((c: any) => (
@@ -140,12 +143,12 @@ export function FollowerModal({ userProfile }: any) {
                       color: "black",
                     }}
                   >
-                    {c.fullname}
+                    {c.firstname}
                   </p>
                 </a>
               </div>
               <div className="d-flex justify-content-end">
-                {sessionStorage.getItem("userId") === c._id ? (
+                {localStorage.getItem("userId") === c._id ? (
                   <Button
                     style={{
                       backgroundColor: "black",
@@ -154,7 +157,7 @@ export function FollowerModal({ userProfile }: any) {
                     }}
                     disabled
                   >
-                    คุณ
+                    you
                   </Button>
                 ) : CheckFollower?.some(
                     (follower: any) => follower === c._id
@@ -167,7 +170,7 @@ export function FollowerModal({ userProfile }: any) {
                     }}
                     onClick={() => handleUnfollow(c)}
                   >
-                    ติดตามแล้ว
+                    followed
                   </Button>
                 ) : (
                   <Button
@@ -178,7 +181,7 @@ export function FollowerModal({ userProfile }: any) {
                     }}
                     onClick={() => handleFollow(c)}
                   >
-                    ติดตาม
+                    follow
                   </Button>
                 )}
               </div>

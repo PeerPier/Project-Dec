@@ -1,10 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  UserCredential,
-} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -14,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "kku-blogging.appspot.com",
   messagingSenderId: "1049515511189",
   appId: "1:1049515511189:web:128d03a138874966c63a9c",
-  measurementId: "G-SJNFTSNPGW",
+  measurementId: "G-SJNFTSNPGW"
 };
 
 const app = initializeApp(firebaseConfig);

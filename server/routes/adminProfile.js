@@ -41,9 +41,7 @@ router.post("/", async (req, res) => {
     if (!user) {
       return res.status(403).json({ error: "ไม่พบผู้ใช้" });
     }
-    if (password !== user.password) {
-      return res.status(403).json({ error: "รหัสผ่านไม่ถูกต้อง" });
-    }
+    
     console.log("formDatatoSend(user)", formDatatoSend(user));
     return res.status(200).json(formDatatoSend(user));
   } catch (err) {

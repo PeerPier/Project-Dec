@@ -79,7 +79,6 @@ const BlogPage = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportPostId, setReportPostId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
-  const userId = sessionStorage.getItem("userId");
 
   const handleShowReportModal = (id: string | undefined) => {
     setReportPostId(id || "");
@@ -94,7 +93,10 @@ const BlogPage = () => {
 
   const handleReportPost = async () => {
     if (reportPostId && reportReason) {
+      console.log("reportPostId", reportPostId);
+      console.log("reportReason", reportReason);
       try {
+        const userId = sessionStorage.getItem("userId");
         if (!userId) {
           throw new Error("User is not logged in.");
         }
@@ -117,6 +119,10 @@ const BlogPage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("blog", blog);
+  }, [blog]);
+
   const fetchBlog = () => {
     axios
       .post(API_BASE_URL + "/create-blog/get-blog", { blog_id })
@@ -126,6 +132,8 @@ const BlogPage = () => {
           setParentCommentCountFun: setTotalParentCommentsLoaded,
         });
         setBlog(blog);
+
+        console.log("after", blog);
 
         axios
           .post(API_BASE_URL + "/search-blogs", {
@@ -211,7 +219,7 @@ const BlogPage = () => {
                     {fullname}
                     <br />@
                     <Link
-                      to={`/user/${author?._id}`}
+                      to={`/user/${author_username}`}
                       className="underline "
                       style={{ color: "inherit" }}
                     >
@@ -225,6 +233,8 @@ const BlogPage = () => {
                 </p>
               </div>
             </div>
+
+            <BlogInteraction />
 
             <Modal
               show={showReportModal}

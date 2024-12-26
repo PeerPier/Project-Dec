@@ -29,6 +29,8 @@ const SearchPage = () => {
     axios
       .post(API_BASE_URL + "/search-blogs", { query, page })
       .then(async ({ data }) => {
+        console.log(data.blogs);
+
         let formatData = await filterPaginationData({
           state: blogs,
           data: data.blogs,
@@ -48,6 +50,7 @@ const SearchPage = () => {
     axios
       .post(API_BASE_URL + "/search-users", { query })
       .then(({ data: { users } }) => {
+        console.log(users);
         setUsers(users);
       });
   };

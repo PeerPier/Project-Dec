@@ -6,7 +6,6 @@ import {
   Outlet,
 } from "react-router-dom";
 import LoginPage from "./Screens/login";
-import RegistPage from "./Screens/register";
 import TestPage from "./Screens/test";
 import HomePage from "./Screens/home.page";
 import Profile from "./Screens/profile";
@@ -41,7 +40,6 @@ import ProfilePage from "./Screens/ProfilePage";
 import BlogPage from "./Screens/blog.page";
 import DashboardUser from "./Screens/DashboardUser";
 import LoginAdmin from "./Screens/Admin/adminLogin";
-import AccountPreferences from "./Screens/AccountPreferences";
 // import ForgotPassword from './Screens/Admin/ForgotPassword';
 // import VerifyOTP from "./Screens/Admin/VerifyOTP";
 // import ResetPassword from './Screens/Admin/ResetPassword';
@@ -49,7 +47,6 @@ import AccountPreferences from "./Screens/AccountPreferences";
 interface UserContextType {
   userAuth: {
     access_token: string | null;
-    _id?: string;
     username?: string;
     fullname?: string;
     profile_picture?: string;
@@ -99,10 +96,9 @@ function App() {
               element={<UserAuthForm type="สมัครสมาชิก" />}
             />
             <Route path="/" element={<HomePage />} />
-            <Route path="/user/:id" element={<ProfilePage />} />
             <Route path="/search/:query" element={<SearchPage />} />
             <Route path="*" element={<PageNotFound />} />
-
+            <Route path="/user/:id" element={<ProfilePage />} />
             <Route path="/blog/:blog_id" element={<BlogPage />}></Route>
 
             <Route path="/test" element={<TestPage />} />
@@ -127,14 +123,7 @@ function App() {
           <Route path="/admin/login" element={<LoginAdmin type="admin" />} />
           <Route path="/admin/:adminId" element={<AdminHome />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/reset_password/:type/:id/:token"
-            element={<ResetPassword />}
-          />
-          <Route
-            path="/account/preference/:id"
-            element={<AccountPreferences />}
-          />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           {/* <Route path="/forgot-password" element={<ForgotPassword />} />
              <Route path="/verify-otp" element={<VerifyOTP />} />
              <Route path="/reset-password" element={<ResetPassword />} /> */}

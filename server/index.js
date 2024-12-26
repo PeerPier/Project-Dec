@@ -71,6 +71,7 @@ const User = require("./models/user");
 const BlogCreated = require("./routes/blog");
 const Post = require("./models/blog");
 const viewsRouter = require("./routes/view");
+const token = require("./routes/token");
 
 app.use("/signup", registerRouter);
 app.use("/signin", loginRouter);
@@ -83,7 +84,7 @@ app.use("/forgot-password", ForgotPassword);
 app.use("/chats", chatRouter);
 app.use("/messages", messageRouter);
 app.use("/users", find);
-app.use("/reset_password", resetPasswordRouter);
+app.use("/reset-password", resetPasswordRouter);
 app.use("/follow", FollowUser);
 app.use("/admin", AdminProfile);
 app.use("/admin/register", AdminRegister);
@@ -92,6 +93,7 @@ app.use("/api/report", reportRouter);
 app.use("/uploads", express.static("uploads"));
 app.use("/create-blog", BlogCreated);
 app.use("/views", viewsRouter);
+app.use("/token", token);
 
 const generateUsername = async (email) => {
   const { nanoid } = await import("nanoid");

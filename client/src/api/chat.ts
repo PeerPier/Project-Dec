@@ -1,4 +1,6 @@
-export const API_BASE_URL = "http://localhost:3001";
+export const API_BASE_URL =
+  process.env.REACT_APP_API_ENDPOINT ||
+  "https://kku-blog-server-ak2l.onrender.com";
 
 export const postRequest = async (url: string, body: any) => {
   const response = await fetch(url, {

@@ -13,7 +13,9 @@ import { EditorContext } from "../Screens/editor-page";
 import axios from "axios";
 
 const BlogEditor = () => {
-  const API_URL = "http://localhost:3001";
+  const API_URL =
+    process.env.REACT_APP_API_ENDPOINT ||
+    "https://kku-blog-server-ak2l.onrender.com";
   const editorContext = useContext(EditorContext);
   let { blog_id } = useParams();
 

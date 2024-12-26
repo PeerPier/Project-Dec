@@ -1,8 +1,10 @@
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL =
+  process.env.REACT_APP_API_ENDPOINT ||
+  "https://kku-blog-server-ak2l.onrender.com";
 
 // Function to fetch all questions
 export const fetchQuestionsAPI = async () => {
-  const token = sessionStorage.getItem("userId");
+  const token = localStorage.getItem("userId");
   if (!token) {
     console.error("No token found, redirecting to login...");
     return null;
@@ -30,7 +32,7 @@ export const addQuestionAPI = async (
   answer: string,
   createdBy: string
 ) => {
-  const token = sessionStorage.getItem("userId");
+  const token = localStorage.getItem("userId");
   if (!token) {
     console.error("No token found, redirecting to login...");
     return null;
@@ -59,7 +61,7 @@ export const updateQuestionAPI = async (
   topic: string,
   answer: string
 ) => {
-  const token = sessionStorage.getItem("userId"); // Get token from sessionStorage
+  const token = localStorage.getItem("userId"); // Get token from localStorage
 
   if (!token) {
     throw new Error("No admin token found. Unauthorized request.");
@@ -84,7 +86,7 @@ export const updateQuestionAPI = async (
 
 // Function to delete a question
 export const deleteQuestionAPI = async (id: string) => {
-  const token = sessionStorage.getItem("userId");
+  const token = localStorage.getItem("userId");
   if (!token) {
     console.error("No token found, redirecting to login...");
     return null;

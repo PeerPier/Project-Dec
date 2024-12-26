@@ -1,6 +1,6 @@
-import axios from "axios";
-
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL =
+  process.env.REACT_APP_API_ENDPOINT ||
+  "https://kku-blog-server-ak2l.onrender.com";
 
 export const fetchAdminProfile = async (id: string): Promise<any> => {
   if (!id) {
@@ -58,29 +58,7 @@ export const fetchUser = async () => {
     console.error("No token found, redirecting to login...");
     return;
   }
-  const response = await fetch("http://localhost:3001/profile", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch users");
-  }
-
-  const data = await response.json();
-  return data;
-};
-
-export const fetchViews = async () => {
-  const token = sessionStorage.getItem("userId");
-  if (!token) {
-    console.error("No token found, redirecting to login...");
-    return;
-  }
-  const response = await fetch("http://localhost:3001/views", {
+  const response = await fetch("https://kku-blog-server-ak2l.onrender.com/profile", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -104,16 +82,18 @@ export const fetchUsersAPI = async () => {
     return;
   }
 
-  const response = await fetch("http://localhost:3001/admin/users", {
+  const response = await fetch("https://kku-blog-server-ak2l.onrender.com/admin/users", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
+
   if (!response.ok) {
     throw new Error("Failed to fetch users");
   }
+
   const data = await response.json();
   return data;
 };
@@ -125,7 +105,7 @@ export const fetchAllUser = async () => {
     return;
   }
 
-  const response = await fetch("http://localhost:3001/admin/viewer", {
+  const response = await fetch("https://kku-blog-server-ak2l.onrender.com/admin/viewer", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -136,52 +116,6 @@ export const fetchAllUser = async () => {
     throw new Error("Failed to fetch users");
   }
 
-  const data = await response.json();
-  return data;
-};
-
-export const fetchAllBlog = async () => {
-  const token = sessionStorage.getItem("userId");
-  if (!token) {
-    console.error("No token found, redirecting to login...");
-    return;
-  }
-
-  const response = await fetch(
-    "http://localhost:3001/admin/blogs/within24hour",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch users");
-  }
-
-  const data = await response.json();
-  return data;
-};
-
-export const fetchBlogById = async (userId: string | null) => {
-  const token = sessionStorage.getItem("userId");
-  if (!token) {
-    console.error("No token found, redirecting to login...");
-    return;
-  }
-  const response = await fetch(`http://localhost:3001/admin/blogs/${userId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch posts");
-  }
   const data = await response.json();
   return data;
 };
@@ -207,39 +141,6 @@ export const deleteUserAPI = async (userId: string): Promise<void> => {
     }
   } catch (error) {
     console.error("Error deleting user:", error);
-    throw error;
-  }
-};
-
-export const updateUserAPI = async (
-  userId: string,
-  fullname: string,
-  email: string
-): Promise<void> => {
-  const adminToken = sessionStorage.getItem("userId"); // Get the admin token from sessionStorage
-
-  if (!adminToken) {
-    throw new Error("No admin token found. Unauthorized request.");
-  }
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/profile/edit-profile/update-info/${userId}`, // Fixed the URL here
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminToken}`, // Send token in the header
-        },
-        body: JSON.stringify({ fullname, email }), // Send updated data in the request body
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to update user");
-    }
-  } catch (error) {
-    console.error("Error updating user:", error);
     throw error;
   }
 };

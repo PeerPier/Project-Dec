@@ -1,7 +1,9 @@
 import { Post } from "../types/post";
 import { User } from "../types/user";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL =
+  process.env.REACT_APP_API_ENDPOINT ||
+  "https://kku-blog-server-ak2l.onrender.com";
 
 export const searchPost = async (query: string): Promise<Post[]> => {
   try {

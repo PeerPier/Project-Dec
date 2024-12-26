@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../misc/AccountPreferences.css";
-
 
 const DeleteAccountModal: React.FC<{
   userId: string | null;
@@ -14,11 +12,15 @@ const DeleteAccountModal: React.FC<{
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const API_BASE_URL =
+    process.env.REACT_APP_API_ENDPOINT ||
+    "https://kku-blog-server-ak2l.onrender.com";
+  const navigate = useNavigate();
 
   const handleDeleteAccount = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3001/profile/edit-profile/delete/${userId}`,
+        `${API_BASE_URL}/profile/edit-profile/delete/${userId}`,
         {
           data: { password },
         }
@@ -39,20 +41,21 @@ const DeleteAccountModal: React.FC<{
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>ลบบัญชีผู้ใช้</Modal.Title>
+        <Modal.Title>Delete Account</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
-          คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีของคุณ
-          การดำเนินการนี้ไม่สามารถย้อนกลับได้
+          Are you sure you want to delete your account? This action cannot be
+          undone.
         </p>
         <Form>
           <Form.Group controlId="password">
-            <Form.Label>กรอกรหัสผ่านของคุณเพื่อยืนยัน</Form.Label>
+            <Form.Label>Enter your password to confirm</Form.Label>
             <Form.Control
               type="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -63,21 +66,11 @@ const DeleteAccountModal: React.FC<{
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          style={{
-            backgroundColor: "#333" /* สีพื้นหลัง */,
-            color: "white" /* สีข้อความ */,
-            borderRadius: "8px" /* มุมโค้ง */,
-            padding: "10px 20px" /* ขนาด padding */,
-            border: "none" /* ไม่มีเส้นขอบ */,
-            textTransform: "none" /* ข้อความไม่เปลี่ยนรูปแบบ */,
-          }}
-          onClick={handleDeleteAccount}
-        >
-          ยืนยัน
-        </Button>
         <Button variant="secondary" onClick={onClose}>
-          ยกเลิก
+          Cancel
+        </Button>
+        <Button variant="danger" onClick={handleDeleteAccount}>
+          Delete Account
         </Button>
       </Modal.Footer>
     </Modal>

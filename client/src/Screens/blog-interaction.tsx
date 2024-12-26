@@ -1,10 +1,8 @@
 import { useContext, useEffect } from "react";
-import {
-  FaRegHeart,
-  FaHeart,
-  FaRegCommentDots,
-  FaTwitter,
-} from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { FaRegCommentDots } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import { BlogContext } from "./blog.page";
@@ -37,36 +35,46 @@ const BlogInteraction = () => {
     userAuth: { username, access_token },
   } = userContext;
 
+  // const handleLike = () => {
+  //   if (access_token) {
+  //     setLikeByUser((preVal) => !preVal);
+  //     !islikedByUser ? total_likes++ : total_likes--;
+  //     setBlog({ ...blog, activity: { ...activity, total_likes } });
+  //     console.log(islikedByUser);
+  //   } else {
+  //     toast.error("กรุณาเข้าสู่ระบบก่อนไลค์บล็อก");
+  //   }
+  // };
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (access_token) {
       axios
         .post(
-          API_BASE_URL + "/create-blog/isliked-by-user", // Call your new API
+          API_BASE_URL + "/create-blog/isliked-by-user",
           { _id },
           {
             headers: {
-              Authorization: `Bearer ${access_token}`, // Attach the token
+              Authorization: `Bearer ${access_token}`,
             },
           }
         )
         .then(({ data: { result } }) => {
-          setLikeByUser(Boolean(result)); // Set the like status
+          setLikeByUser(Boolean(result));
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [access_token, _id, setLikeByUser]);
+  }, []);
 
   const handleLike = () => {
     if (access_token) {
-      setLikeByUser(!islikedByUser); // Toggle like status in the UI
+      setLikeByUser(!islikedByUser);
 
       // Calculate the new total likes
       const newTotalLikes = !islikedByUser ? total_likes + 1 : total_likes - 1;
 
-      // Update blog's total likes in state
       setBlog({
         ...blog,
         activity: {
@@ -76,28 +84,27 @@ const BlogInteraction = () => {
         },
       });
 
-      // Send the like/dislike request to the server
       axios
         .post(
-          API_BASE_URL + "/create-blog/like-blog", // Assuming this is your like/unlike API
+          API_BASE_URL + "/create-blog/like-blog",
           {
             _id,
             islikedByUser,
           },
           {
             headers: {
-              Authorization: `Bearer ${access_token}`, // Attach token
+              Authorization: `Bearer ${access_token}`,
             },
           }
         )
         .then(({ data }) => {
-          // console.log(data); // Handle successful response
+          console.log(data);
         })
         .catch((err) => {
-          console.log(err); // Handle error
+          console.log(err);
         });
     } else {
-      toast.error("กรุณาเข้าสู่ระบบก่อนไลค์บล็อก"); // Show error if not logged in
+      toast.error("กรุณาเข้าสู่ระบบก่อนไลค์บล็อก");
     }
   };
 
@@ -126,8 +133,8 @@ const BlogInteraction = () => {
           </p>
 
           <button
-            onClick={() => setCommentWrapper((prevVal) => !prevVal)}
-            className="rounded-circle d-flex align-items-center justify-content-center"
+            onClick={() => setCommentWrapper((preVal) => !preVal)}
+            className="rounded-circle d-flex align-items-center justify-content-center "
             style={{
               width: "2.5rem",
               height: "2.5rem",
